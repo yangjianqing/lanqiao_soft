@@ -60,7 +60,6 @@
             <groupId>cn.lanqiao</groupId>
             <artifactId>lanqiao-generator</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

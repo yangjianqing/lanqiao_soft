@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.business.mapper.StudentMapper">
+    
+    <resultMap type="Student" id="StudentResult">
+        <result property="id"    column="id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuGender"    column="stu_gender"    />
+        <result property="stuCollege"    column="stu_college"    />
+        <result property="stuSpecialities"    column="stu_specialities"    />
+        <result property="stuClassId"    column="stu_class_id"    />
+        <result property="stuDuties"    column="stu_duties"    />
+        <result property="stuGroupId"    column="stu_group_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectStudentVo">
+        select id, stu_name, stu_id, stu_gender, stu_college, stu_specialities, stu_class_id, stu_duties, stu_group_id, create_time, update_time from student
+    </sql>
+
+    <select id="selectStudentList" parameterType="Student" resultMap="StudentResult">
+        <include refid="selectStudentVo"/>
+        <where>  
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="stuGender != null  and stuGender != ''"> and stu_gender = #{stuGender}</if>
+            <if test="stuCollege != null  and stuCollege != ''"> and stu_college = #{stuCollege}</if>
+            <if test="stuSpecialities != null  and stuSpecialities != ''"> and stu_specialities = #{stuSpecialities}</if>
+            <if test="stuClassId != null "> and stu_class_id = #{stuClassId}</if>
+            <if test="stuDuties != null "> and stu_duties = #{stuDuties}</if>
+            <if test="stuGroupId != null "> and stu_group_id = #{stuGroupId}</if>
+        </where>
+    </select>
+    
+    <select id="selectStudentById" parameterType="Long" resultMap="StudentResult">
+        <include refid="selectStudentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStudent" parameterType="Student" useGeneratedKeys="true" keyProperty="id">
+        insert into student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuName != null and stuName != ''">stu_name,</if>
+            <if test="stuId != null">stu_id,</if>
+            <if test="stuGender != null and stuGender != ''">stu_gender,</if>
+            <if test="stuCollege != null and stuCollege != ''">stu_college,</if>
+            <if test="stuSpecialities != null and stuSpecialities != ''">stu_specialities,</if>
+            <if test="stuClassId != null">stu_class_id,</if>
+            <if test="stuDuties != null">stu_duties,</if>
+            <if test="stuGroupId != null">stu_group_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuName != null and stuName != ''">#{stuName},</if>
+            <if test="stuId != null">#{stuId},</if>
+            <if test="stuGender != null and stuGender != ''">#{stuGender},</if>
+            <if test="stuCollege != null and stuCollege != ''">#{stuCollege},</if>
+            <if test="stuSpecialities != null and stuSpecialities != ''">#{stuSpecialities},</if>
+            <if test="stuClassId != null">#{stuClassId},</if>
+            <if test="stuDuties != null">#{stuDuties},</if>
+            <if test="stuGroupId != null">#{stuGroupId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStudent" parameterType="Student">
+        update student
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuName != null and stuName != ''">stu_name = #{stuName},</if>
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="stuGender != null and stuGender != ''">stu_gender = #{stuGender},</if>
+            <if test="stuCollege != null and stuCollege != ''">stu_college = #{stuCollege},</if>
+            <if test="stuSpecialities != null and stuSpecialities != ''">stu_specialities = #{stuSpecialities},</if>
+            <if test="stuClassId != null">stu_class_id = #{stuClassId},</if>
+            <if test="stuDuties != null">stu_duties = #{stuDuties},</if>
+            <if test="stuGroupId != null">stu_group_id = #{stuGroupId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStudentById" parameterType="Long">
+        delete from student where id = #{id}
+    </delete>
+
+    <delete id="deleteStudentByIds" parameterType="String">
+        delete from student where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

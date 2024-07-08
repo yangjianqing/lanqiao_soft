@@ -181,7 +181,11 @@
                 <artifactId>lanqiao-common</artifactId>
                 <version>${lanqiao.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>cn.lanqiao</groupId>
+                <artifactId>lanqiao_soft_business</artifactId>
+                <version>${lanqiao.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -192,6 +196,8 @@
         <module>lanqiao_soft-quartz</module>
         <module>lanqiao_soft-generator</module>
         <module>lanqiao_soft-common</module>
+        <module>lanqiao_soft_business</module>
+
     </modules>
     <packaging>pom</packaging>
 

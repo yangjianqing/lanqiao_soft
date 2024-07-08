@@ -58,6 +58,12 @@
             <groupId>cn.lanqiao</groupId>
             <artifactId>lanqiao-system</artifactId>
         </dependency>
+        <!--业务模块-->
+        <dependency>
+            <groupId>cn.lanqiao</groupId>
+            <artifactId>lanqiao_soft_business</artifactId>
+        </dependency>
+
 
     </dependencies>
 
