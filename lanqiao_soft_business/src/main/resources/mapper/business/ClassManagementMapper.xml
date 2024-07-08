@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.business.mapper.ClassManagementMapper">
+    
+    <resultMap type="ClassManagement" id="ClassManagementResult">
+        <result property="id"    column="id"    />
+        <result property="claName"    column="cla_name"    />
+        <result property="schoolId"    column="school_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="grade"    column="grade"    />
+    </resultMap>
+
+    <sql id="selectClassManagementVo">
+        select id, cla_name, school_id, create_time, update_time, grade from class_management
+    </sql>
+
+    <select id="selectClassManagementList" parameterType="ClassManagement" resultMap="ClassManagementResult">
+        <include refid="selectClassManagementVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="claName != null  and claName != ''"> and cla_name like concat('%', #{claName}, '%')</if>
+            <if test="schoolId != null "> and school_id = #{schoolId}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+        </where>
+    </select>
+    
+    <select id="selectClassManagementById" parameterType="Long" resultMap="ClassManagementResult">
+        <include refid="selectClassManagementVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertClassManagement" parameterType="ClassManagement" useGeneratedKeys="true" keyProperty="id">
+        insert into class_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="claName != null and claName != ''">cla_name,</if>
+            <if test="schoolId != null">school_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="grade != null">grade,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="claName != null and claName != ''">#{claName},</if>
+            <if test="schoolId != null">#{schoolId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="grade != null">#{grade},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClassManagement" parameterType="ClassManagement">
+        update class_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="claName != null and claName != ''">cla_name = #{claName},</if>
+            <if test="schoolId != null">school_id = #{schoolId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="grade != null">grade = #{grade},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteClassManagementById" parameterType="Long">
+        delete from class_management where id = #{id}
+    </delete>
+
+    <delete id="deleteClassManagementByIds" parameterType="String">
+        delete from class_management where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

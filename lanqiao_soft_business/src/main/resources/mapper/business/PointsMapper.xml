@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.business.mapper.PointsMapper">
+    
+    <resultMap type="Points" id="PointsResult">
+        <result property="id"    column="id"    />
+        <result property="semName"    column="sem_name"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="upPoints"    column="up_points"    />
+        <result property="upScore"    column="up_score"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPointsVo">
+        select id, sem_name, stu_id, up_points, up_score, create_time, update_time from points
+    </sql>
+
+    <select id="selectPointsList" parameterType="Points" resultMap="PointsResult">
+        <include refid="selectPointsVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="semName != null  and semName != ''"> and sem_name like concat('%', #{semName}, '%')</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="upPoints != null  and upPoints != ''"> and up_points = #{upPoints}</if>
+            <if test="upScore != null "> and up_score = #{upScore}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectPointsById" parameterType="Long" resultMap="PointsResult">
+        <include refid="selectPointsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPoints" parameterType="Points" useGeneratedKeys="true" keyProperty="id">
+        insert into points
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="semName != null and semName != ''">sem_name,</if>
+            <if test="stuId != null">stu_id,</if>
+            <if test="upPoints != null and upPoints != ''">up_points,</if>
+            <if test="upScore != null">up_score,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="semName != null and semName != ''">#{semName},</if>
+            <if test="stuId != null">#{stuId},</if>
+            <if test="upPoints != null and upPoints != ''">#{upPoints},</if>
+            <if test="upScore != null">#{upScore},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePoints" parameterType="Points">
+        update points
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="semName != null and semName != ''">sem_name = #{semName},</if>
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="upPoints != null and upPoints != ''">up_points = #{upPoints},</if>
+            <if test="upScore != null">up_score = #{upScore},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePointsById" parameterType="Long">
+        delete from points where id = #{id}
+    </delete>
+
+    <delete id="deletePointsByIds" parameterType="String">
+        delete from points where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

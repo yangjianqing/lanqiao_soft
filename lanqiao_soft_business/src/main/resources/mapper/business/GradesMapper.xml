@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lanqiao.business.mapper.GradesMapper">
+    
+    <resultMap type="Grades" id="GradesResult">
+        <result property="id"    column="id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="semName"    column="sem_name"    />
+        <result property="projectGrades"    column="project_grades"    />
+        <result property="courseGrades"    column="course_grades"    />
+        <result property="examScores"    column="exam_scores"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectGradesVo">
+        select id, stu_id, course_id, sem_name, project_grades, course_grades, exam_scores, create_time, update_time from grades
+    </sql>
+
+    <select id="selectGradesList" parameterType="Grades" resultMap="GradesResult">
+        <include refid="selectGradesVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="semName != null  and semName != ''"> and sem_name like concat('%', #{semName}, '%')</if>
+            <if test="projectGrades != null "> and project_grades = #{projectGrades}</if>
+            <if test="courseGrades != null "> and course_grades = #{courseGrades}</if>
+            <if test="examScores != null "> and exam_scores = #{examScores}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectGradesById" parameterType="Long" resultMap="GradesResult">
+        <include refid="selectGradesVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGrades" parameterType="Grades" useGeneratedKeys="true" keyProperty="id">
+        insert into grades
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">stu_id,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="semName != null and semName != ''">sem_name,</if>
+            <if test="projectGrades != null">project_grades,</if>
+            <if test="courseGrades != null">course_grades,</if>
+            <if test="examScores != null">exam_scores,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">#{stuId},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="semName != null and semName != ''">#{semName},</if>
+            <if test="projectGrades != null">#{projectGrades},</if>
+            <if test="courseGrades != null">#{courseGrades},</if>
+            <if test="examScores != null">#{examScores},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGrades" parameterType="Grades">
+        update grades
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="semName != null and semName != ''">sem_name = #{semName},</if>
+            <if test="projectGrades != null">project_grades = #{projectGrades},</if>
+            <if test="courseGrades != null">course_grades = #{courseGrades},</if>
+            <if test="examScores != null">exam_scores = #{examScores},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGradesById" parameterType="Long">
+        delete from grades where id = #{id}
+    </delete>
+
+    <delete id="deleteGradesByIds" parameterType="String">
+        delete from grades where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
