@@ -24,7 +24,7 @@
             placeholder="请选择性别"
             style="width: 240px"
           >
-          <el-option label="全部" value="all"></el-option>
+          <el-option label="全部" value=""></el-option>
           <el-option label="男" value="男"></el-option>
           <el-option label="女" value="女"></el-option>
           </el-select>
@@ -160,7 +160,7 @@
             placeholder="请选择性别"
             style="width: 240px"
           >
-          <el-option label="全部" value="all"></el-option>
+          <el-option label="全部" value=""></el-option>
           <el-option label="男" value="男"></el-option>
           <el-option label="女" value="女"></el-option>
           </el-select>
@@ -213,7 +213,7 @@ const data = reactive({
     pageSize: 10,
     stuName: null,
     stuId: null,
-    stuGender: null,
+    stuGender: "",
     stuCollege: null,
     stuSpecialities: null,
     stuClassId: null,
@@ -247,6 +247,8 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询学生信息列表 */
 function getList() {
   loading.value = true;
+   queryParams.value.stuGender = queryParams.value.stuGender ||  null
+   debugger
   listStudent(queryParams.value).then(response => {
     studentList.value = response.rows;
     total.value = response.total;
@@ -266,7 +268,7 @@ function reset() {
     id: null,
     stuName: null,
     stuId: null,
-    stuGender: null,
+    stuGender: "",
     stuCollege: null,
     stuSpecialities: null,
     stuClassId: null,
