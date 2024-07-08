@@ -30,7 +30,7 @@
           </el-select>
         </el-form-item>
       </el-form-item>
-      <el-form-item label="学生学院" prop="stuCollege">
+      <el-form-item label="学院" prop="stuCollege">
         <el-input
           v-model="queryParams.stuCollege"
           placeholder="请输入学生学院"
@@ -38,7 +38,7 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="学生专业" prop="stuSpecialities">
+      <el-form-item label="专业" prop="stuSpecialities">
         <el-input
           v-model="queryParams.stuSpecialities"
           placeholder="请输入学生专业"
@@ -46,15 +46,19 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="班级唯一标识" prop="stuClassId">
-        <el-input
-          v-model="queryParams.stuClassId"
-          placeholder="请输入班级唯一标识"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+      <el-form-item label="班级" prop="stuClassId">
+         <el-select
+            v-model="queryParams.stuClassId"
+            placeholder="请选择班级"
+            style="width: 240px"
+          >
+          <el-option label="全部" value=""></el-option>
+          <el-option v-for="item in classList" :label="item.claName" :value="item.id"></el-option>
+
+          </el-select>
+
       </el-form-item>
-      <el-form-item label="学生职务" prop="stuDuties">
+      <el-form-item label="职务" prop="stuDuties">
         <el-input
           v-model="queryParams.stuDuties"
           placeholder="请输入学生职务"
@@ -62,10 +66,10 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="学生小组唯一标识" prop="stuGroupId">
+      <el-form-item label="小组" prop="stuGroupId">
         <el-input
           v-model="queryParams.stuGroupId"
-          placeholder="请输入学生小组唯一标识"
+          placeholder="请输入学生小组"
           clearable
           @keyup.enter="handleQuery"
         />
@@ -160,7 +164,6 @@
             placeholder="请选择性别"
             style="width: 240px"
           >
-          <el-option label="全部" value=""></el-option>
           <el-option label="男" value="男"></el-option>
           <el-option label="女" value="女"></el-option>
           </el-select>
@@ -171,8 +174,15 @@
         <el-form-item label="学生专业" prop="stuSpecialities">
           <el-input v-model="form.stuSpecialities" placeholder="请输入学生专业" />
         </el-form-item>
-        <el-form-item label="班级唯一标识" prop="stuClassId">
-          <el-input v-model="form.stuClassId" placeholder="请输入班级唯一标识" />
+        <el-form-item label="班级" prop="stuClassId">
+            <el-select
+              v-model="form.stuClassId"
+              placeholder="请选择班级"
+              style="width: 240px"
+            >
+          <el-option v-for="item in classList" :label="item.claName" :value="item.id"></el-option>
+
+          </el-select>
         </el-form-item>
         <el-form-item label="学生职务" prop="stuDuties">
           <el-input v-model="form.stuDuties" placeholder="请输入学生职务" />
@@ -193,9 +203,19 @@
 
 <script setup name="Student">
 import { listStudent, getStudent, delStudent, addStudent, updateStudent } from "@/api/business/student";
+import { listClassManagement } from "@/api/business/classManagement";
 
+import { onMounted} from "vue";
+
+onMounted( async () => {
+  const classData = await listClassManagement();
+  classList.value = classData.rows
+  console.log(classList.value)
+})
+ 
 const { proxy } = getCurrentInstance();
 
+const classList = ref([]);
 const studentList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -216,7 +236,7 @@ const data = reactive({
     stuGender: "",
     stuCollege: null,
     stuSpecialities: null,
-    stuClassId: null,
+    stuClassId: "",
     stuDuties: null,
     stuGroupId: null,
   },
@@ -247,8 +267,6 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询学生信息列表 */
 function getList() {
   loading.value = true;
-   queryParams.value.stuGender = queryParams.value.stuGender ||  null
-   debugger
   listStudent(queryParams.value).then(response => {
     studentList.value = response.rows;
     total.value = response.total;

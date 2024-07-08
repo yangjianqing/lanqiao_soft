@@ -158,6 +158,7 @@
 <script setup name="ClassManagement">
 import { listClassManagement, getClassManagement, delClassManagement, addClassManagement, updateClassManagement } from "@/api/business/classManagement";
 
+
 const { proxy } = getCurrentInstance();
 const { sys_dept_id } = proxy.useDict('sys_dept_id');
 
