@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="学生姓名" prop="stuName">
+      <el-form-item label="姓名" prop="stuName">
         <el-input
           v-model="queryParams.stuName"
           placeholder="请输入学生姓名"
@@ -9,7 +9,7 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="学生学号" prop="stuId">
+      <el-form-item label="学号" prop="stuId">
         <el-input
           v-model="queryParams.stuId"
           placeholder="请输入学生学号"
@@ -17,13 +17,18 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="学生性别" prop="stuGender">
-        <el-input
-          v-model="queryParams.stuGender"
-          placeholder="请输入学生性别"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+      <el-form-item >
+         <el-form-item label="性别" prop="stuGender">
+          <el-select
+            v-model="queryParams.stuGender"
+            placeholder="请选择性别"
+            style="width: 240px"
+          >
+          <el-option label="全部" value="all"></el-option>
+          <el-option label="男" value="男"></el-option>
+          <el-option label="女" value="女"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form-item>
       <el-form-item label="学生学院" prop="stuCollege">
         <el-input
@@ -115,15 +120,15 @@
 
     <el-table v-loading="loading" :data="studentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="学生唯一标识" align="center" prop="id" />
-      <el-table-column label="学生姓名" align="center" prop="stuName" />
-      <el-table-column label="学生学号" align="center" prop="stuId" />
-      <el-table-column label="学生性别" align="center" prop="stuGender" />
-      <el-table-column label="学生学院" align="center" prop="stuCollege" />
-      <el-table-column label="学生专业" align="center" prop="stuSpecialities" />
-      <el-table-column label="班级唯一标识" align="center" prop="stuClassId" />
-      <el-table-column label="学生职务" align="center" prop="stuDuties" />
-      <el-table-column label="学生小组唯一标识" align="center" prop="stuGroupId" />
+      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="姓名" align="center" prop="stuName" />
+      <el-table-column label="学号" align="center" prop="stuId" />
+      <el-table-column label="性别" align="center" prop="stuGender" />
+      <el-table-column label="学院" align="center" prop="stuCollege" />
+      <el-table-column label="专业" align="center" prop="stuSpecialities" />
+      <el-table-column label="班级" align="center" prop="stuClassId" />
+      <el-table-column label="职务" align="center" prop="stuDuties" />
+      <el-table-column label="小组" align="center" prop="stuGroupId" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['business:student:edit']">修改</el-button>
@@ -143,14 +148,22 @@
     <!-- 添加或修改学生信息对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="studentRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="学生姓名" prop="stuName">
+        <el-form-item label="姓名" prop="stuName">
           <el-input v-model="form.stuName" placeholder="请输入学生姓名" />
         </el-form-item>
-        <el-form-item label="学生学号" prop="stuId">
+        <el-form-item label="学号" prop="stuId">
           <el-input v-model="form.stuId" placeholder="请输入学生学号" />
         </el-form-item>
-        <el-form-item label="学生性别" prop="stuGender">
-          <el-input v-model="form.stuGender" placeholder="请输入学生性别" />
+        <el-form-item label="性别" prop="stuGender">
+          <el-select
+            v-model="form.stuGender"
+            placeholder="请选择性别"
+            style="width: 240px"
+          >
+          <el-option label="全部" value="all"></el-option>
+          <el-option label="男" value="男"></el-option>
+          <el-option label="女" value="女"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="学生学院" prop="stuCollege">
           <el-input v-model="form.stuCollege" placeholder="请输入学生学院" />
